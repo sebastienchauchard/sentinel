@@ -1,8 +1,6 @@
 name: Custom rare subscription-level operations in Azure
 description: |
-  'This query looks for a few sensitive subscription-level events based on Azure Activity Logs. 
-   For example this monitors for the operation name 'Create or Update Snapshot' which is used for creating backups but could be misused by attackers 
-   to dump hashes or extract sensitive information from the disk.'
+  'Custom'
 severity: Low
 requiredDataConnectors:
   - connectorId: AzureActivity
@@ -23,7 +21,7 @@ query: |
   let starttime = 14d;
   let endtime = 1d;
   // The number of operations below which an IP address is considered an unusual source of role assignment operations
-  let alertOperationThreshold = 5;
+  let alertOperationThreshold = 1;
   let SensitiveOperationList =  dynamic(["microsoft.compute/snapshots/write", "microsoft.network/networksecuritygroups/write", "microsoft.storage/storageaccounts/listkeys/action"]);
   let SensitiveActivity = AzureActivity
   | where OperationNameValue in~ (SensitiveOperationList) or OperationNameValue hassuffix "listkeys/action"
